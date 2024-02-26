@@ -1,8 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 require("dotenv").config();
-
 const app = express();
+
+const authController = require("./controllers/authController");
 
 //connect to mongoDB
 mongoose.connect(process.env.DB_URL, {
@@ -13,10 +15,16 @@ mongoose.connect(process.env.DB_URL, {
     .catch((err) => console.log("Could not connect to the server"))
 
 //middleware
-app.use(express.json());
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static('public'));
 
 //routes
-app.use("/api/auth", require("./routes/authRoutes"));
+app.get("/", authController.getHome);//Done
+app.post("/login", authController.login);
+app.post("/otp", authController.otp);
+app.post("/signUp", authController.signUp);
 
 // The server listens on port 3000
 const PORT = process.env.PORT || 3000;

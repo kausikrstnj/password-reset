@@ -2,24 +2,30 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
-exports.register = async (req, res) => {
+// Home 
+exports.getHome = async (req, res) => {
     try {
-        const { username, password } = req.body;
-        let user = await User.findOne({ username });
-        if (user) {
-            return res.status(400).json({ msg: "User already exists" })
-        }
+        res.render("home");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
-        //create new user
-        user = new User({ username, password });
+//otp page
+exports.otp = async (req, res) => {
+    try {
+        res.render("otp");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 
-        //Hash password
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-
-        await user.save();
-        res.status(201).json({ msg: "User registered successfully." })
+//signUp page
+exports.signUp = async (req, res) => {
+    try {
+        res.render("signUp");
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server error")
