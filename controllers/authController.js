@@ -126,8 +126,8 @@ exports.sendEmail = async (req, res) => {
         await user.save();
 
         // Send email with password reset link
-
-        const resetLink = `http://localhost:3000/passwordReset?token=${resetToken}&email=${email}`;
+        const url = process.env.URL;
+        const resetLink = `${url}/passwordReset?token=${resetToken}&email=${email}`;
         // Send email with the resetLink using your email service
         await sendResetEmail(email, resetLink); // Implement this function to send email
 
